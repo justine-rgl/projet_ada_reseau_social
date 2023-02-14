@@ -8,7 +8,7 @@
     </head>
     <body>
         <header>
-            <img src="resoc.jpg" alt="Logo de notre réseau social"/>
+            <a href='admin.php'><img src="resoc.jpg" alt="Logo de notre réseau social"/></a>
             <nav id="menu">
                 <a href="news.php">Actualités</a>
                 <a href="wall.php?user_id=5">Mur</a>
@@ -117,10 +117,11 @@
                         <small>♥ <?php echo $post['like_number']?></small>
                         
                         <a href="">#<?php echo $post['taglist']?></a>
+                        
                     </footer>
                 </article>
                 <?php
-                }// et de pas oublier de fermer ici vote while
+                }
                 ?>
               
 
