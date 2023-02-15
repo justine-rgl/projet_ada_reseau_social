@@ -11,23 +11,13 @@ session_start();
     <body>
         <div id="wrapper">
             <?php
-            /**
-             * Cette page est TRES similaire à wall.php. 
-             * Vous avez sensiblement à y faire la meme chose.
-             * Il y a un seul point qui change c'est la requete sql.
-             */
-            /**
-             * Etape 1: Le mur concerne un utilisateur en particulier
-             */
-            $userId = intval($_GET['user_id']);
-            ?>
-            <?php
-            /**
-             * Etape 2: se connecter à la base de donnée
-             */
             include('database.php');
             ?>
-
+            
+            <?php
+            $userId = intval($_GET['user_id']);
+            ?>
+            
             <aside>
                 <?php
                 /**
