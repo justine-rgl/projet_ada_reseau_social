@@ -76,8 +76,8 @@
                             <dd><input type='text'name='pseudo'></dd>
                             <dt><label for='email'>E-Mail</label></dt>
                             <dd><input type='email'name='email'></dd>
-                            <dt><label for='motpasse'>Mot de passe</label></dt>
-                            <dd><input type='password'name='motpasse'></dd>
+                            <dt><label for='motdepasse'>Mot de passe</label></dt>
+                            <dd><input type='password'name='motdepasse'></dd>
                         </dl>
                         <input type='submit'>
                     </form>
