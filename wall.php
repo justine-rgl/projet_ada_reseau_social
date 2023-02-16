@@ -72,7 +72,7 @@ session_start();
                  */
                 $laQuestionEnSql = "
                     SELECT posts.content, posts.created, users.alias as author_name, users.id as user_id,
-                    COUNT(likes.id) as like_number, GROUP_CONCAT(DISTINCT tags.label) AS taglist 
+                    COUNT(likes.id) as like_number, GROUP_CONCAT(DISTINCT tags.label) AS taglist, GROUP_CONCAT(DISTINCT tags.id) AS tagidlist
                     FROM posts
                     JOIN users ON  users.id=posts.user_id
                     LEFT JOIN posts_tags ON posts.id = posts_tags.post_id  
@@ -106,7 +106,7 @@ session_start();
                         </div>                                            
                         <footer>
                             <small>♥ <?php echo $post['like_number'] ?></small>
-                            <a href="">#<?php echo $post['taglist'] ?></a>,
+                            <?php include('_tags.php'); ?>
                         </footer>
                     </article>
                 <?php } ?>

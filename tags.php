@@ -39,10 +39,10 @@ session_start();
                 <img src="user.jpg" alt="Portrait de l'utilisatrice"/>
                 <section>
                     <h3>Présentation</h3>
-                    <p>Sur cette page vous trouverez les derniers messages comportant
-                        le mot-clé <?php echo $tag ['label']?>
-                        (n° <?php echo $tagId ?>)
-                    </p>
+                        <p>Sur cette page vous trouverez les derniers messages comportant
+                            le mot-clé <?php echo $tag ['label']?>
+                            (n° <?php echo $tagId ?>)
+                        </p>
 
                 </section>
             </aside>
@@ -57,7 +57,8 @@ session_start();
                     users.id as user_id,
                     users.alias as author_name,  
                     count(likes.id) as like_number,  
-                    GROUP_CONCAT(DISTINCT tags.label) AS taglist 
+                    GROUP_CONCAT(DISTINCT tags.label) AS taglist,
+                    GROUP_CONCAT(DISTINCT tags.id) AS tagidlist 
                     FROM posts_tags as filter 
                     JOIN posts ON posts.id=filter.post_id
                     JOIN users ON users.id=posts.user_id
@@ -92,7 +93,7 @@ session_start();
                         </div>                                            
                         <footer>
                             <small>♥ <?php echo $post['like_number'] ?></small>
-                            <a href="">#<?php echo $post['taglist'] ?></a>
+                            <?php include('_tags.php'); ?>
                         </footer>
                     </article>
                 <?php } ?>
