@@ -63,6 +63,42 @@ session_start();
                     <p>Sur cette page vous trouverez tous les message de l'utilisatrice : <?php echo $user['alias'] ?>
                         (n° <?php echo $userId ?>)
                     </p>
+                    <?php $enCoursDeTraitement = isset($_POST['message']);
+                    if ($enCoursDeTraitement)
+                    {
+                        $new_message = $_POST['message'];
+
+                        $new_message = $mysqli->real_escape_string($new_message);
+             
+                        $lInstructionSql = "INSERT INTO posts "
+                                . "(id, user_id, content, created) "
+                                . "VALUES (NULL, "
+                                . $_SESSION["connected_id"] . ", "
+                                . "'" . $new_message . "', "
+                                . "NOW());"
+                                ;
+                        $ok = $mysqli->query($lInstructionSql);
+                        if ( ! $ok)
+                        {
+                            echo "Impossible d'ajouter le message: " . $mysqli->error;
+                        } else
+                        {
+                            echo "Message posté";
+                            header("location:wall.php?user_id=" . $_SESSION['connected_id']);
+                            exit();
+                        }
+                    }
+                    ?>    
+
+
+                
+                    <form action="wall.php" method="post">
+                        <div id="form">
+                            <label for='message'>Écrivez votre message ici</label><br>
+                            <textarea type="text" name='message' id="textArea" rows="5" cols="35"></textarea><br>
+                        </div>
+                        <input type='submit'>
+                    </form>
                 </section>
             </aside>
             <main>
