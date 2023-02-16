@@ -13,15 +13,15 @@
                 $lesInformations = $mysqli->query($laQuestionEnSql);
                 $user = $lesInformations->fetch_assoc();
             ?>
-            <a href='admin.php'><img src="resoc.jpg" alt="Logo de notre réseau social"/></a>
+            <a href='admin.php'><img src="resoc_panda_header.png" alt="Logo de notre réseau social"/></a>
             <nav id="menu">
-                <a href="news.php">Actualités</a>
-                <a href="wall.php?user_id=<?php echo $_SESSION['connected_id'] ?>">Mur</a>
-                <a href="feed.php?user_id=<?php echo $_SESSION['connected_id'] ?>">Flux</a>
-                <a href="tags.php?tag_id=A CHANGER">Mots-clés</a>
+                <a href="news.php">ACTUALITÉS</a>
+                <a href="wall.php?user_id=<?php echo $_SESSION['connected_id'] ?>">MUR</a>
+                <a href="feed.php?user_id=<?php echo $_SESSION['connected_id'] ?>">FLUX</a>
+                <a href="tags.php?tag_id=A CHANGER">MOTS-CLÉS</a>
             </nav>
             <nav id="user">
-                <a href="#">Profil</a>
+                <a href="#">PROFIL</a>
                 <ul>
                     <li><a href="settings.php?user_id=<?php echo $_SESSION['connected_id'] ?>">Paramètres</a></li>
                     <li><a href="followers.php?user_id=<?php echo $_SESSION['connected_id'] ?>">Mes suiveurs</a></li>

@@ -10,7 +10,17 @@ session_start();
     <body>
         <div id="wrapper">          
             <aside>
-                <img src = "user.jpg" alt = "Portrait de l'utilisatrice"/>
+            <?php
+                $userId = intval($_GET['user_id']);
+                include('database.php');
+
+                $laQuestionEnSql = "SELECT * FROM `users` WHERE id= '$userId' ";
+                $lesInformations = $mysqli->query($laQuestionEnSql);
+                $user = $lesInformations->fetch_assoc();
+            ?>
+                
+                <img src="<?php echo $user['pictures']?>" alt="Portrait de l'utilisatrice"/>               
+                
                 <section>
                     <h3>Présentation</h3>
                     <p>Sur cette page vous trouverez la liste des personnes qui
@@ -20,10 +30,7 @@ session_start();
             </aside>
             
             <main class='contacts'>
-                <?php
-                $userId = intval($_GET['user_id']);
-                include('database.php');
-                
+                <?php                
                 $laQuestionEnSql = "
                     SELECT users.*
                     FROM followers

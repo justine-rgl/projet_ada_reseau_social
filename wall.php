@@ -22,7 +22,7 @@ session_start();
                 $user = $lesInformations->fetch_assoc();
                 ?>
 
-                <img src="user.jpg" alt="Portrait de l'utilisatrice"/>
+                <img src="<?php echo $user['pictures']?>" alt="Portrait de l'utilisatrice"/>
                 
                 <section>
                     <h3>Présentation</h3>
@@ -101,7 +101,7 @@ session_start();
                             <p><?php echo $post['content'] ?></p>
                         </div>                                            
                         <footer>
-                            <small>♥ <?php echo $post['like_number'] ?></small>
+                            <small>💜 <?php echo $post['like_number'] ?></small>
                             <?php include('_tags.php'); ?>
                         </footer>
                     </article>

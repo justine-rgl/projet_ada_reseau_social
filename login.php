@@ -11,7 +11,7 @@ session_start();
     </head>
     <body>
         <header>
-            <img src="resoc.jpg" alt="Logo de notre réseau social"/>
+            <img src="resoc_panda_header.png" alt="Logo de notre réseau social"/>
         </header>
 
         <div id="wrapper" >

@@ -10,18 +10,30 @@ session_start();
     </head>
     <body>
         <div id="wrapper">
+    
+            <?php
+            include('database.php');
+            $userId = intval($_GET['user_id']);
+            ?>
+
             <aside>
-                <img src="user.jpg" alt="Portrait de l'utilisatrice"/>
+                <?php
+                $laQuestionEnSql = "SELECT * FROM `users` WHERE id= '$userId' ";
+                $lesInformations = $mysqli->query($laQuestionEnSql);
+                $user = $lesInformations->fetch_assoc();
+                ?>
+
+                <img src="resoc_panda.png" alt="Portrait de l'utilisatrice"/>
+                
                 <section>
                     <h3>Présentation</h3>
                     <p>Sur cette page vous trouverez les derniers messages de
                         tous les utilisatrices du site.</p>
                 </section>
             </aside>
-            <main>           
-                <?php
-                include('database.php');
+            <main>    
 
+                <?php
                 $laQuestionEnSql = "
                     SELECT posts.content,
                     posts.created,
@@ -61,7 +73,7 @@ session_start();
                             <p><?php echo $post['content'] ?></p>
                         </div>
                         <footer>
-                            <small>♥ <?php echo $post['like_number'] ?> </small>
+                            <small>💜 <?php echo $post['like_number'] ?> </small>
                             <?php include('_tags.php'); ?>
                         </footer>
                     </article>
