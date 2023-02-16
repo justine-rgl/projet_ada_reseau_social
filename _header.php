@@ -2,7 +2,6 @@
 <html lang='<?php echo $language; ?>'>
     <head>
         <meta charset="utf-8">
-        <!--<title>ReSoC - Administration</title> -->
         <meta name="author" content="Julien Falconnet">
         <link rel="stylesheet" href="style.css"/>
     </head>
@@ -28,7 +27,6 @@
                     <li><a href="followers.php?user_id=<?php echo $_SESSION['connected_id'] ?>">Mes suiveurs</a></li>
                     <li><a href="subscriptions.php?user_id=<?php echo $_SESSION['connected_id'] ?>">Mes abonnements</a></li>
                 </ul>
-
             </nav>
         </header>
     </body>

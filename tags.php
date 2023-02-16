@@ -5,52 +5,34 @@ session_start();
 <html >
     <head>
         <?php include('_header.php'); ?>
-        <title>ReSoC - Les message par mot-clé</title> 
+        <title>ReSoC - Les messages par mot-clé</title> 
     </head>
     <body>
         <div id="wrapper">
             <?php
-            /**
-             * Cette page est similaire à wall.php ou feed.php 
-             * mais elle porte sur les mots-clés (tags)
-             */
-            /**
-             * Etape 1: Le mur concerne un mot-clé en particulier
-             */
-            $tagId = intval($_GET['tag_id']);
-            ?>
-            <?php
-            /**
-             * Etape 2: se connecter à la base de donnée
-             */
             include('database.php');
+            $tagId = intval($_GET['tag_id']);
             ?>
 
             <aside>
                 <?php
-                /**
-                 * Etape 3: récupérer le nom du mot-clé
-                 */
                 $laQuestionEnSql = "SELECT * FROM tags WHERE id= '$tagId' ";
                 $lesInformations = $mysqli->query($laQuestionEnSql);
                 $tag = $lesInformations->fetch_assoc();
-                //@todo: afficher le résultat de la ligne ci dessous, remplacer XXX par le label et effacer la ligne ci-dessous
                 ?>
+                
                 <img src="user.jpg" alt="Portrait de l'utilisatrice"/>
+                
                 <section>
                     <h3>Présentation</h3>
-                        <p>Sur cette page vous trouverez les derniers messages comportant
-                            le mot-clé <?php echo $tag ['label']?>
-                            (n° <?php echo $tagId ?>)
+                        <p>
+                            Sur cette page vous trouverez les derniers messages comportant le mot-clé <?php echo $tag ['label']?> (n° <?php echo $tagId ?>)
                         </p>
-
                 </section>
             </aside>
+            
             <main>
                 <?php
-                /**
-                 * Etape 3: récupérer tous les messages avec un mot clé donné
-                 */
                 $laQuestionEnSql = "
                     SELECT posts.content,
                     posts.created,
@@ -69,19 +51,17 @@ session_start();
                     GROUP BY posts.id
                     ORDER BY posts.created DESC  
                     ";
-                $lesInformations = $mysqli->query($laQuestionEnSql);
+                
+                    $lesInformations = $mysqli->query($laQuestionEnSql);
                 if ( ! $lesInformations)
                 {
                     echo("Échec de la requete : " . $mysqli->error);
                 }
 
-                /**
-                 * Etape 4: @todo Parcourir les messsages et remplir correctement le HTML avec les bonnes valeurs php
-                 */
                 while ($post = $lesInformations->fetch_assoc())
                 {
+                ?>                
                     
-                    ?>                
                     <article>
                         <h3>
                             <time datetime='2020-02-01 11:12:13' >31 février 2010 à 11h12</time>
@@ -97,8 +77,6 @@ session_start();
                         </footer>
                     </article>
                 <?php } ?>
-
-
             </main>
         </div>
     </body>

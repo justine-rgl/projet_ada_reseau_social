@@ -12,23 +12,16 @@ session_start();
         <div id="wrapper">
             <?php
             include('database.php');
-            ?>
-            
-            <?php
             $userId = intval($_GET['user_id']);
             ?>
-            
+
             <aside>
                 <?php
-                /**
-                 * Etape 3: récupérer le nom de l'utilisateur
-                 */
                 $laQuestionEnSql = "SELECT * FROM `users` WHERE id= '$userId' ";
                 $lesInformations = $mysqli->query($laQuestionEnSql);
                 $user = $lesInformations->fetch_assoc();
-                //@todo: afficher le résultat de la ligne ci dessous, remplacer XXX par l'alias et effacer la ligne ci-dessous
-                //echo "<pre>" . print_r($user, 1) . "</pre>";
                 ?>
+
                 <img src="user.jpg" alt="Portrait de l'utilisatrice"/>
                 <section>
                     <h3>Présentation</h3>
@@ -36,14 +29,11 @@ session_start();
                         auxquel est abonnée l'utilisatrice <?php echo $user['alias'] ?>
                         (n° <?php echo $userId ?>)
                     </p>
-
                 </section>
             </aside>
+
             <main>
                 <?php
-                /**
-                 * Etape 3: récupérer tous les messages des abonnements
-                 */
                 $laQuestionEnSql = "
                     SELECT posts.content,
                     posts.created,
@@ -62,21 +52,15 @@ session_start();
                     GROUP BY posts.id
                     ORDER BY posts.created DESC  
                     ";
-                $lesInformations = $mysqli->query($laQuestionEnSql);
+                
+                    $lesInformations = $mysqli->query($laQuestionEnSql);
                 if ( ! $lesInformations)
                 {
                     echo("Échec de la requete : " . $mysqli->error);
                 }
 
-                /**
-                 * Etape 4: @todo Parcourir les messsages et remplir correctement le HTML avec les bonnes valeurs php
-                 * A vous de retrouver comment faire la boucle while de parcours...
-                 */
                 while ($post = $lesInformations->fetch_assoc())
                 {
-
-                //echo "<pre>" . print_r($post, 1) . "</pre>";
-                
                 ?>   
         
                 <article>
@@ -90,16 +74,10 @@ session_start();
                     </div>                                            
                     <footer>
                         <small>♥ <?php echo $post['like_number']?></small>
-                        
                         <?php include('_tags.php'); ?>
-                        
                     </footer>
                 </article>
-                <?php
-                }
-                ?>
-              
-
+                <?php } ?>
             </main>
         </div>
     </body>

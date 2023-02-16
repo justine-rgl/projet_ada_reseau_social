@@ -20,21 +20,8 @@ session_start();
             </aside>
             <main>           
                 <?php
-                /*
-                  // C'est ici que le travail PHP commence
-                  // Votre mission si vous l'acceptez est de chercher dans la base
-                  // de données la liste des 5 derniers messsages (posts) et
-                  // de l'afficher
-                  // Documentation : les exemples https://www.php.net/manual/fr/mysqli.query.php
-                  // plus généralement : https://www.php.net/manual/fr/mysqli.query.php
-                 */
+                include('database.php');
 
-                // Etape 1: Ouvrir une connexion avec la base de donnée.
-               include('database.php');
-
-                // Etape 2: Poser une question à la base de donnée et récupérer ses informations
-                // cette requete vous est donnée, elle est complexe mais correcte, 
-                // si vous ne la comprenez pas c'est normal, passez, on y reviendra
                 $laQuestionEnSql = "
                     SELECT posts.content,
                     posts.created,
@@ -50,10 +37,10 @@ session_start();
                     LEFT JOIN likes      ON likes.post_id  = posts.id 
                     GROUP BY posts.id
                     ORDER BY posts.created DESC  
-                    LIMIT 5
+                    LIMIT 500
                     ";
+                
                 $lesInformations = $mysqli->query($laQuestionEnSql);
-                // Vérification
                 if ( ! $lesInformations)
                 {
                     echo "<article>";
@@ -61,19 +48,9 @@ session_start();
                     echo("<p>Indice: Vérifiez la requete  SQL suivante dans phpmyadmin<code>$laQuestionEnSql</code></p>");
                     exit();
                 }
-
-                // Etape 3: Parcourir ces données et les ranger bien comme il faut dans du html
-                // NB: à chaque tour du while, la variable post ci dessous reçois les informations du post suivant.
                 while ($post = $lesInformations->fetch_assoc())
                 {
- 
-
-                    // @todo : Votre mission c'est de remplacer les AREMPLACER par les bonnes valeurs
-                    // ci-dessous par les bonnes valeurs cachées dans la variable $post 
-                    // on vous met le pied à l'étrier avec created
-                    // 
-                    // avec le ? > ci-dessous on sort du mode php et on écrit du html comme on veut... mais en restant dans la boucle
-                    ?>
+                ?>
                     <article>
                         <h3>
                             <time><?php echo $post['created'] ?></time>
@@ -88,11 +65,7 @@ session_start();
                             <?php include('_tags.php'); ?>
                         </footer>
                     </article>
-                    <?php
-                    // avec le <?php ci-dessus on retourne en mode php 
-                }// cette accolade ferme et termine la boucle while ouverte avant.
-                ?>
-
+                    <?php } ?>
             </main>
         </div>
     </body>
