@@ -17,9 +17,9 @@ session_start();
 
             <aside>
                 <?php
-                $laQuestionEnSql = "SELECT * FROM users WHERE id= '$userId' ";
-                $lesInformations = $mysqli->query($laQuestionEnSql);
-                $user = $lesInformations->fetch_assoc();
+                $userIdRequest = "SELECT * FROM users WHERE id= '$userId' ";
+                $userIdRequestInfos = $mysqli->query($userIdRequest);
+                $user = $userIdRequestInfos->fetch_assoc();
                 ?>
 
                 <img src="<?php echo $user['pictures']?>" alt="Portrait de l'utilisatrice"/>
@@ -67,37 +67,58 @@ session_start();
                             <input type='submit'>
                         </form>
                     <?php } ?>
-
-                    <?php  
-                        $enCoursDeTraitement = isset($_POST['Abonnement']);
+                    <?php
+                    // CHECK IF IS ALREADY FOLLOWED
+                    $followingStatus = "SELECT * FROM followers WHERE followed_user_id= '$userId' AND following_user_id= '" . $_SESSION['connected_id'] . "' ";
+                    $followingStatusInfos = $mysqli->query($followingStatus);
+                    $isFollowing = $followingStatusInfos->fetch_assoc();
+                    // FOLLOW BUTTON
+                    if (isset($_SESSION['connected_id']) and $userId != $_SESSION['connected_id'] and !$isFollowing) { ?>
+                        <form action="wall.php?user_id=<?php echo $userId ?>" method="post">
+                            <input type='submit' name="Abonnement" value="S'abonner">
+                        </form>
+                    <?php
+                    } else if ($isFollowing) { ?>
+                            <form action="wall.php?user_id=<?php echo $userId ?>" method="post">
+                                <input type='submit' name="Désabonnement" value="Se désabonner">
+                            </form>
+                    <?php
+                    } ?>
+                    <?php 
+                    $enCoursDeTraitement = isset($_POST['Abonnement']);
                         if ($enCoursDeTraitement)
-                        {      
+                        {   
                             $new_follower = $_POST['Abonnement'];
                             $new_follower = $mysqli->real_escape_string($new_follower);  
                         
-                            $lInstructionSql = "INSERT INTO followers "
+                            $addNewFollower = "INSERT INTO followers "
                             . "(id, followed_user_id, following_user_id) "
                             . "VALUES (NULL, "
                             . $userId . ", "
                             . $_SESSION["connected_id"] ." );"
                             ;
-                            $mysqli->query($lInstructionSql);
-                    
-                            echo "<pre>" . print_r($_POST, 1) . "</pre>";
+                            $mysqli->query($addNewFollower);
+                            header("refresh:0");
+                        }
+
+                    $enCoursDeTraitement = isset($_POST['Désabonnement']);
+                        if ($enCoursDeTraitement)
+                        {   
+                            $deleting_follower = $_POST['Désabonnement'];
+                            $deleting_follower = $mysqli->real_escape_string($deleting_follower);  
+                        
+                            $deleteFollower= "DELETE FROM followers 
+                            WHERE followed_user_id= '$userId' AND following_user_id='" . $_SESSION['connected_id'] . "' ";
+                            $deletedFollower=$mysqli->query($deleteFollower);     
+                            header("refresh:0");               
                         }
                     ?> 
-                    <?php if ($_SESSION['connected_id'] != $userId)
-                    { ?>
-                    <form method="post">
-                        <input type="submit" name="Abonnement" value="S'abonner"/>
-                    </form>
-                    <?php } ?>
                 </section>
             </aside>
             <main>
 
                 <?php
-                $laQuestionEnSql = "
+                $messageRequest = "
                     SELECT posts.content, posts.created, users.alias as author_name, users.id as user_id,
                     COUNT(likes.id) as like_number, GROUP_CONCAT(DISTINCT tags.label) AS taglist, GROUP_CONCAT(DISTINCT tags.id) AS tagidlist
                     FROM posts
@@ -110,13 +131,13 @@ session_start();
                     ORDER BY posts.created DESC  
                     ";
                 
-                $lesInformations = $mysqli->query($laQuestionEnSql);
-                if ( ! $lesInformations)
+                $messageRequestInfos = $mysqli->query($messageRequest);
+                if ( ! $messageRequestInfos)
                 {
                     echo("Échec de la requete : " . $mysqli->error);
                 }
                 
-                while ($post = $lesInformations->fetch_assoc())
+                while ($post = $messageRequestInfos->fetch_assoc())
                 {                    
                 ?>                
                     
