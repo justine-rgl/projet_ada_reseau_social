@@ -56,14 +56,42 @@ session_start();
                         }
                     }
                     ?>    
+                    <?php 
+                    if ($_SESSION['connected_id'] == $userId)
+                    { ?>
+                        <form action="wall.php" method="post">
+                            <div id="form">
+                                <label for='message'>Écrivez votre message ici</label><br>
+                                <textarea type="text" name='message' id="textArea" rows="5" cols="35"></textarea><br>
+                            </div>
+                            <input type='submit'>
+                        </form>
+                    <?php } ?>
 
-                    <form action="wall.php" method="post">
-                        <div id="form">
-                            <label for='message'>Écrivez votre message ici</label><br>
-                            <textarea type="text" name='message' id="textArea" rows="5" cols="35"></textarea><br>
-                        </div>
-                        <input type='submit'>
+                    <?php  
+                        $enCoursDeTraitement = isset($_POST['Abonnement']);
+                        if ($enCoursDeTraitement)
+                        {      
+                            $new_follower = $_POST['Abonnement'];
+                            $new_follower = $mysqli->real_escape_string($new_follower);  
+                        
+                            $lInstructionSql = "INSERT INTO followers "
+                            . "(id, followed_user_id, following_user_id) "
+                            . "VALUES (NULL, "
+                            . $userId . ", "
+                            . $_SESSION["connected_id"] ." );"
+                            ;
+                            $mysqli->query($lInstructionSql);
+                    
+                            echo "<pre>" . print_r($_POST, 1) . "</pre>";
+                        }
+                    ?> 
+                    <?php if ($_SESSION['connected_id'] != $userId)
+                    { ?>
+                    <form method="post">
+                        <input type="submit" name="Abonnement" value="S'abonner"/>
                     </form>
+                    <?php } ?>
                 </section>
             </aside>
             <main>
