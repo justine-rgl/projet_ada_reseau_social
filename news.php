@@ -31,15 +31,34 @@ session_start();
                         tous les utilisatrices du site.</p>
                 </section>
             </aside>
-            <main>    
+            <main>  
+
+            <?php 
+                $enCoursDeTraitement = isset($_POST['Like']);
+                    if ($enCoursDeTraitement)
+                    {   
+                        $new_like = $_POST['Like'];
+                        $new_like = $mysqli->real_escape_string($new_like);  
+                                        
+                        $addNewLike = "INSERT INTO likes "
+                            . "(id, user_id, post_id) "
+                            . "VALUES (NULL, "
+                            . $_SESSION["connected_id"] .", "
+                            . $_GET['post_id'] ." );"
+                            ;
+                        $mysqli->query($addNewLike);
+                        header("refresh:0");
+                    }
+            ?>
 
                 <?php
                 $messageRequest = "
                     SELECT posts.content,
                     posts.created,
+                    posts.id as post_id,
                     users.id as user_id,
                     users.alias as author_name, 
-                    COUNT(likes.id) as like_number,   
+                    COUNT(DISTINCT likes.id) as like_number,   
                     GROUP_CONCAT(DISTINCT tags.label) AS taglist,
                     GROUP_CONCAT(DISTINCT tags.id) AS tagidlist
                     FROM posts
@@ -64,6 +83,7 @@ session_start();
                 while ($post = $messageRequestInfos->fetch_assoc())
                 {
                 ?>
+
                     <article>
                         <h3>
                             <time><?php echo $post['created'] ?></time>
@@ -74,11 +94,16 @@ session_start();
                             <p><?php echo $post['content'] ?></p>
                         </div>
                         <footer>
-                            <small>💜 <?php echo $post['like_number'] ?> </small>
+                            <small>
+                                <form action="news.php?post_id=<?php echo $post['post_id'] ?>" method="post">
+                                    <input type='submit' name="Like" value="💜">
+                                    <?php echo $post['like_number'] ?> 
+                                </form>  
+                            </small>
                             <?php include('_tags.php'); ?>
                         </footer>
                     </article>
-                    <?php } ?>
+                    <?php } ?>                    
             </main>
         </div>
     </body>

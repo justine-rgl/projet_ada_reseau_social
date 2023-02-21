@@ -116,11 +116,35 @@ session_start();
                 </section>
             </aside>
             <main>
+            <?php 
+                $enCoursDeTraitement = isset($_POST['Like']);
+                    if ($enCoursDeTraitement)
+                    {   
+                        $new_like = $_POST['Like'];
+                        $new_like = $mysqli->real_escape_string($new_like);  
+                                        
+                        $addNewLike = "INSERT INTO likes "
+                            . "(id, user_id, post_id) "
+                            . "VALUES (NULL, "
+                            . $_SESSION["connected_id"] .", "
+                            . $_GET['post_id'] ." );"
+                            ;
+                        $mysqli->query($addNewLike);
+                        header("location:wall.php?user_id=" . $_SESSION['connected_id']);
+                        exit();
+                    }
+            ?>
 
-                <?php
+            <?php
                 $messageRequest = "
-                    SELECT posts.content, posts.created, users.alias as author_name, users.id as user_id,
-                    count(likes.id) as like_number, GROUP_CONCAT(DISTINCT tags.label) AS taglist, GROUP_CONCAT(DISTINCT tags.id) AS tagidlist
+                    SELECT posts.content, 
+                    posts.created,
+                    posts.id as post_id,
+                    users.alias as author_name, 
+                    users.id as user_id,
+                    count(DISTINCT likes.id) as like_number, 
+                    GROUP_CONCAT(DISTINCT tags.label) AS taglist, 
+                    GROUP_CONCAT(DISTINCT tags.id) AS tagidlist
                     FROM posts
                     JOIN users ON  users.id=posts.user_id
                     LEFT JOIN posts_tags ON posts.id = posts_tags.post_id  
@@ -150,7 +174,12 @@ session_start();
                             <p><?php echo $post['content'] ?></p>
                         </div>                                            
                         <footer>
-                            <small>💜 <?php echo $post['like_number'] ?></small>
+                            <small>
+                                <form action="wall.php?post_id=<?php echo $post['post_id'] ?>" method="post">
+                                    <input type='submit' name="Like" value="💜">
+                                    <?php echo $post['like_number'] ?> 
+                                </form> 
+                            </small>
                             <?php include('_tags.php'); ?>
                         </footer>
                     </article>
