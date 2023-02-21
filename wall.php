@@ -116,7 +116,7 @@ session_start();
                 </section>
             </aside>
             <main>
-            <?php 
+                <?php
                 $enCoursDeTraitement = isset($_POST['Like']);
                     if ($enCoursDeTraitement)
                     {   
@@ -133,8 +133,20 @@ session_start();
                         header("location:wall.php?user_id=" . $_SESSION['connected_id']);
                         exit();
                     }
+                
+                    $enCoursDeTraitement = isset($_POST['Unlike']);
+                    if ($enCoursDeTraitement)
+                    {   
+                        $deleting_like = $_POST['Unlike'];
+                        $deleting_like = $mysqli->real_escape_string($deleting_like);  
+                    
+                        $deleteLiked= "DELETE FROM likes 
+                        WHERE user_id= '" . $_SESSION['connected_id'] . "' AND post_id= post_id ";
+                        $deletedLike=$mysqli->query($deleteLiked);     
+                        header("location:wall.php?user_id=" . $_SESSION['connected_id']);
+                        exit();           
+                    }
             ?>
-
             <?php
                 $messageRequest = "
                     SELECT posts.content, 
@@ -175,10 +187,23 @@ session_start();
                         </div>                                            
                         <footer>
                             <small>
-                                <form action="wall.php?post_id=<?php echo $post['post_id'] ?>" method="post">
-                                    <input type='submit' name="Like" value="💜">
-                                    <?php echo $post['like_number'] ?> 
-                                </form> 
+                                <?php 
+                                    $likeStatus = "SELECT * FROM likes WHERE user_id= '" . $_SESSION['connected_id'] . "' AND post_id= post_id ";
+                                    $likeStatusInfos = $mysqli->query($likeStatus);
+                                    $isLiked = $likeStatusInfos->fetch_assoc();
+
+                                    if (isset($_SESSION['connected_id']) and !$isLiked) { ?>
+                                        <form action="wall.php?post_id=<?php echo $post['post_id'] ?>" method="post">
+                                            <input type='submit' name="Like" value="💖">
+                                            <?php echo $post['like_number'] ?> 
+                                        </form>
+                                <?php
+                                    } else if ($isLiked) { ?>
+                                        <form action="wall.php?post_id=<?php echo $post['post_id'] ?>" method="post">
+                                            <input type='submit' name="Unlike" value="💖">
+                                            <?php echo $post['like_number'] ?> 
+                                        </form>
+                                <?php } ?>
                             </small>
                             <?php include('_tags.php'); ?>
                         </footer>
