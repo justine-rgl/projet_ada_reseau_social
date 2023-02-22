@@ -10,7 +10,7 @@ session_start();
     <body>
         <div id="wrapper">
             <?php
-            include('database.php');
+            include('_database.php');
             $tagId = intval($_GET['tag_id']);
             ?>
 
@@ -21,7 +21,7 @@ session_start();
                 $tag = $lesInformations->fetch_assoc();
                 ?>
                 
-                <img src="resoc_panda.png" alt="Portrait de l'utilisatrice"/>
+                <img src="pictures/resoc_panda.png" alt="Portrait de l'utilisatrice"/>
                 
                 <section>
                     <h3>Présentation</h3>

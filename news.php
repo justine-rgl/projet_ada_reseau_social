@@ -1,36 +1,26 @@
 <?php
-session_start();
+    session_start();
+    include('_header.php');
+    include('_database.php');
+    include('_loggedUserQuery.php');
 ?>
+
 <!doctype html>
 <html>
     <head>
-        <?php include('_header.php'); ?>
         <title>ReSoC - Actualités</title> 
-        
     </head>
     <body>
         <div id="wrapper">
-    
-            <?php
-            include('database.php');
-            $userId = intval($_GET['user_id']);
-            ?>
-
-            <aside>
-                <?php
-                $laQuestionEnSql = "SELECT * FROM `users` WHERE id= '$userId' ";
-                $lesInformations = $mysqli->query($laQuestionEnSql);
-                $user = $lesInformations->fetch_assoc();
-                ?>
-
-                <img src="resoc_panda.png" alt="Portrait de l'utilisatrice"/>
+             <aside>
+                <img src="pictures/resoc_panda.png" alt="Portrait de l'utilisatrice"/>
                 
                 <section>
-                    <h3>Présentation</h3>
-                    <p>Sur cette page vous trouverez les derniers messages de
-                        tous les utilisatrices du site.</p>
+                    <h3>Jungle news</h3>
+                    <p>Sur cette page vous trouverez les dernières news de la jungle.</p>
                 </section>
             </aside>
+
             <main>  
             <?php 
                 $enCoursDeTraitement = isset($_POST['Like']);
@@ -42,7 +32,7 @@ session_start();
                         $addNewLike = "INSERT INTO likes "
                             . "(id, user_id, post_id) "
                             . "VALUES (NULL, "
-                            . $_SESSION["connected_id"] .", "
+                            . $loggedUserId .", "
                             . $_GET['post_id'] ." );"
                             ;
                         $mysqli->query($addNewLike);
@@ -56,13 +46,15 @@ session_start();
                         $deleting_like = $mysqli->real_escape_string($deleting_like);  
                     
                         $deleteLiked= "DELETE FROM likes 
-                        WHERE user_id= '" . $_SESSION['connected_id'] . "' AND post_id= post_id ";
+                        WHERE user_id= '" . $loggedUserId . "' AND post_id= post_id ";
                         $deletedLike=$mysqli->query($deleteLiked);     
                         header("refresh:0");     
                     }
             ?>
-                <?php
-                $messageRequest = "
+            
+            <?php
+                // on requête tous les messages (et leurs infos relatives) postés par les users du réseau
+                $messageQuery = "
                     SELECT posts.content,
                     posts.created,
                     posts.id as post_id,
@@ -81,16 +73,18 @@ session_start();
                     LIMIT 500
                     ";
                 
-                $messageRequestInfos = $mysqli->query($messageRequest);
+                // on envoie la requête
+                $messageQueryInfos = $mysqli->query($messageQuery);
 
-                if ( ! $messageRequestInfos)
+                // check requête
+                if ( ! $messageQueryInfos)
                 {
-                    echo "<article>";
                     echo("Échec de la requete : " . $mysqli->error);
-                    echo("<p>Indice: Vérifiez la requete  SQL suivante dans phpmyadmin<code>$messageRequest</code></p>");
                     exit();
                 }
-                while ($post = $messageRequestInfos->fetch_assoc())
+
+                // on injecte les différentes infos dans le HTML
+                while ($post = $messageQueryInfos->fetch_assoc())
                 {
                 ?>
 
@@ -99,34 +93,33 @@ session_start();
                             <time><?php echo $post['created'] ?></time>
                         </h3>
                         <address>par <a href="wall.php?user_id=<?php echo $post['user_id'] ?>"><?php echo $post['author_name'] ?></a></address>
-                        
                         <div>
                             <p><?php echo $post['content'] ?></p>
                         </div>
                         <footer>
-                        <small>
-                            <?php 
-                                $likeStatus = "SELECT * FROM likes WHERE user_id= '" . $_SESSION['connected_id'] . "' AND post_id= post_id ";
-                                $likeStatusInfos = $mysqli->query($likeStatus);
-                                $isLiked = $likeStatusInfos->fetch_assoc();
+                            <small>
+                                <?php 
+                                    $likeStatus = "SELECT * FROM likes WHERE user_id= '" . $loggedUserId . "' AND post_id= post_id ";
+                                    $likeStatusInfos = $mysqli->query($likeStatus);
+                                    $isLiked = $likeStatusInfos->fetch_assoc();
 
-                                if (isset($_SESSION['connected_id']) and !$isLiked) { ?>
-                                    <form action="news.php?post_id=<?php echo $post['post_id'] ?>" method="post">
-                                        <input type='submit' name="Like" value="💖">
-                                        <?php echo $post['like_number'] ?> 
-                                    </form>
-                            <?php
-                                } else if ($isLiked) { ?>
-                                    <form action="news.php?post_id=<?php echo $post['post_id'] ?>" method="post">
-                                        <input type='submit' name="Unlike" value="💖">
-                                        <?php echo $post['like_number'] ?> 
-                                    </form>
-                            <?php } ?>
+                                    if (isset($loggedUserId) and !$isLiked) { ?>
+                                        <form action="news.php?post_id=<?php echo $post['post_id'] ?>" method="post">
+                                            <input type='submit' name="Like" value="💖">
+                                            <?php echo $post['like_number'] ?> 
+                                        </form>
+                                <?php
+                                    } else if ($isLiked) { ?>
+                                        <form action="news.php?post_id=<?php echo $post['post_id'] ?>" method="post">
+                                            <input type='submit' name="Unlike" value="💖">
+                                            <?php echo $post['like_number'] ?> 
+                                        </form>
+                                    <?php } ?>
                             </small>
                             <?php include('_tags.php'); ?>
                         </footer>
                     </article>
-                    <?php } ?>                    
+                <?php } ?>                    
             </main>
         </div>
     </body>

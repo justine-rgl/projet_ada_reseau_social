@@ -12,7 +12,7 @@ session_start();
         <div id="wrapper">
             <?php
             $userId =intval($_GET['user_id']);
-            include('database.php');
+            include('_database.php');
             ?>
 
             <aside>

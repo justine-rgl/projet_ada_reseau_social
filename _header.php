@@ -2,23 +2,23 @@
 <html lang='<?php echo $language; ?>'>
     <head>
         <meta charset="utf-8">
-        <meta name="author" content="Julien Falconnet">
+        <meta name="author" content="Audrey, Lorena & Justine">
         <link rel="stylesheet" href="style.css"/>
     </head>
     <body>
-    <?php include('database.php'); ?>
+    <?php include('_database.php'); ?>
         <header>
             <?php
-                $laQuestionEnSql = "SELECT * FROM `users` LIMIT 50";
-                $lesInformations = $mysqli->query($laQuestionEnSql);
-                $user = $lesInformations->fetch_assoc();
+                $usersQuery = "SELECT * FROM `users` LIMIT 50";
+                $usersQueryInfo = $mysqli->query($usersQuery);
+                $user = $usersQueryInfo->fetch_assoc();
             ?>
-            <a href='admin.php'><img src="resoc_panda_header.png" alt="Logo de notre réseau social"/></a>
+            <a href='admin.php'><img src="pictures/resoc_panda_header.png" alt="Logo de notre réseau social"/></a>
             <nav id="menu">
-                <a href="news.php">ACTUALITÉS</a>
+                <a href="news.php">NEWS</a>
                 <a href="wall.php?user_id=<?php echo $_SESSION['connected_id'] ?>">MUR</a>
-                <a href="feed.php?user_id=<?php echo $_SESSION['connected_id'] ?>">FLUX</a>
-                <a href="tags.php?tag_id=A CHANGER">MOTS-CLÉS</a>
+                <a href="feed.php?user_id=<?php echo $_SESSION['connected_id'] ?>">FEED</a>
+                <a href="tags.php?tag_id=A CHANGER">TAGS</a>
             </nav>
             <nav id="user">
                 <a href="#">PROFIL</a>

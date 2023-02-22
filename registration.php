@@ -1,22 +1,27 @@
+<?php
+    include('_database.php');
+?>
+
 <!doctype html>
 <html lang="fr">
     <head>
         <meta charset="utf-8">
         <title>ReSoC - Inscription</title> 
-        <meta name="author" content="Julien Falconnet">
+        <meta name="author" content="Audrey, Lorena & Justine">
         <link rel="stylesheet" href="style.css"/>
     </head>
     <body>
         <header>
-            <img src="resoc_panda_header.png" alt="Logo de notre réseau social"/>
+            <img src="pictures/resoc_panda_header.png" alt="Logo de notre réseau social"/>
         </header>
 
         <div id="wrapper" >
 
             <aside>
-                <h2>Présentation</h2>
-                <p>Bienvenue sur notre réseau social.</p>
+                <h2>Hello jungle! 🐼</h2>
+                <p>Bienvenue sur le réseau social des Pandas trop mignons (plus que le Z).</p>
             </aside>
+
             <main>
                 <article>
                     <h2>Inscription</h2>
@@ -28,24 +33,26 @@
                         $new_alias = $_POST['pseudo'];
                         $new_passwd = $_POST['motdepasse'];
                         
-                        include('database.php');
-                        
+                        // check caractères spéciaux + cryptage
                         $new_email = $mysqli->real_escape_string($new_email);
                         $new_alias = $mysqli->real_escape_string($new_alias);
                         $new_passwd = $mysqli->real_escape_string($new_passwd);
                         $new_passwd = md5($new_passwd);
                         
-                        $lInstructionSql = "INSERT INTO users (id, email, password, alias) "
+                        // on fait une requête pour insérer les inputs du user dans la DB
+                        $addNewUserQuery = "INSERT INTO users (id, email, password, alias) "
                                 . "VALUES (NULL, "
                                 . "'" . $new_email . "', "
                                 . "'" . $new_passwd . "', "
                                 . "'" . $new_alias . "'"
                                 . ");";
 
-                        $ok = $mysqli->query($lInstructionSql);
-                        if ( ! $ok)
+                        // envoi de la requête
+                        $addNewUserQueryInfo = $mysqli->query($addNewUserQuery);
+                        // si l'utilisateur existe déjà, on renvoie un message d'erreur
+                        if ( ! $addNewUserQueryInfo)
                         {
-                            echo "L'inscription a échouée : " . $mysqli->error;
+                            echo "L'inscription a échoué : " . $mysqli->error;
                         } else
                         {
                             echo "Votre inscription est un succès : " . $new_alias;

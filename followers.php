@@ -1,54 +1,50 @@
 <?php
-session_start();
+    session_start();
+    include('_header.php');
+    include('_database.php');
+    include('_loggedUserQuery.php');
 ?>
+
 <!doctype html>
 <html>
     <head>
-        <?php include('_header.php'); ?>
         <title>ReSoC - Mes abonnés </title>
     </head>
     <body>
         <div id="wrapper">          
-            <aside>
-            <?php
-                $userId = intval($_GET['user_id']);
-                include('database.php');
-
-                $laQuestionEnSql = "SELECT * FROM `users` WHERE id= '$userId' ";
-                $lesInformations = $mysqli->query($laQuestionEnSql);
-                $user = $lesInformations->fetch_assoc();
-            ?>
-                
+            <aside>                
                 <img src="<?php echo $user['pictures']?>" alt="Portrait de l'utilisatrice"/>               
                 
                 <section>
-                    <h3>Présentation</h3>
-                    <p>Sur cette page vous trouverez la liste des personnes qui
-                        suivent les messages de l'utilisatrice
-                        n° <?php echo intval($_GET['user_id']) ?></p>
+                    <h3><?php echo $user['alias'] ?>'s followers</h3>
+                    <p>Sur cette page vous trouverez la liste des Pandas qui
+                        suivent vos messages.</p>
                 </section>
             </aside>
             
             <main class='contacts'>
-                <?php                
-                $laQuestionEnSql = "
+                <?php         
+                // on requête toutes les infos des users concernés pour les afficher en tant que followers       
+                $myFollowersQuery = "
                     SELECT users.*
                     FROM followers
                     LEFT JOIN users ON users.id=followers.following_user_id
-                    WHERE followers.followed_user_id='$userId'
+                    WHERE followers.followed_user_id='$loggedUserId'
                     GROUP BY users.id
                     ";
                 
-                $lesInformations = $mysqli->query($laQuestionEnSql);
-                while ($post = $lesInformations->fetch_assoc())
+                // on envoie la requête
+                $myFollowersQueryInfo = $mysqli->query($myFollowersQuery);
+                
+                // on récupère les infos dans un tableau qu'on stocke dans une variable
+                while ($follower = $myFollowersQueryInfo->fetch_assoc())
                 {
                 ?>
                 
-                <article>
-                    <img src="user.jpg" alt="blason"/>
-                    <h3><a href="wall.php?user_id=<?php echo $post['id'] ?>"><?php echo $post['alias'] ?></a></h3>
-                    <p>id:<?php echo $post['id'] ?></p>
-                </article>
+                    <article>
+                        <img src="<?php echo $follower['pictures'] ?>" alt="blason"/>
+                        <h3><a href="wall.php?user_id=<?php echo $follower['id'] ?>"><?php echo $follower['alias'] ?></a></h3>
+                    </article>
                 <?php } ?> 
             </main>
         </div>

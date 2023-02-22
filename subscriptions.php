@@ -12,7 +12,7 @@ session_start();
             <aside>
             <?php
                 $userId = intval($_GET['user_id']);
-                include('database.php');
+                include('_database.php');
 
                 $laQuestionEnSql = "SELECT * FROM `users` WHERE id= '$userId' ";
                 $lesInformations = $mysqli->query($laQuestionEnSql);
