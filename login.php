@@ -13,7 +13,7 @@
     </head>
     <body>
         <header>
-            <img src="pictures/resoc_panda_header.png" alt="Logo de notre réseau social"/>
+            <img src="pictures/panda-roule.png" alt="Logo de notre réseau social"/>
         </header>
 
         <div id="wrapper" >

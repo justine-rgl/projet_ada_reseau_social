@@ -13,7 +13,7 @@
                 $usersQueryInfo = $mysqli->query($usersQuery);
                 $user = $usersQueryInfo->fetch_assoc();
             ?>
-            <a href='admin.php'><img src="pictures/resoc_panda_header.png" alt="Logo de notre réseau social"/></a>
+            <a href='admin.php'><img src="pictures/panda-roule.png" alt="Logo de notre réseau social"/></a>
             <nav id="menu">
                 <a href="news.php">NEWS</a>
                 <a href="wall.php?user_id=<?php echo $_SESSION['connected_id'] ?>">MUR</a>

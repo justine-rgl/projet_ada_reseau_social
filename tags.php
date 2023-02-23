@@ -21,7 +21,7 @@
             ?>
 
             <main>
-                <h2>Tag : <?php echo $tag ['label'] ?></h2>
+                <h2>Tag 4: <?php echo $tag ['label'] ?></h2>
                 
                 <?php
                 $enCoursDeTraitement = isset($_POST['Like']);
@@ -34,10 +34,10 @@
                         . "(id, user_id, post_id) "
                         . "VALUES (NULL, "
                         . $loggedUserId .", "
-                        . $_GET['post_id'] ." );"
+                        . $_POST['post_id'] ." );"
                         ;
                     $mysqli->query($addNewLike);
-                    header("location:tags.php?tag_id=" . $tagId);
+                    header("location:tags.php?tag_id=" . $tag['id']);
                     exit();
                 }
             
@@ -48,10 +48,10 @@
                     $deleting_like = $mysqli->real_escape_string($deleting_like);  
                 
                     $deleteLiked= "DELETE FROM likes 
-                    WHERE user_id= '" . $loggedUserId . "' AND post_id= '" . $_GET['post_id'] ."' ";
+                    WHERE user_id= '" . $loggedUserId . "' AND post_id= '" . $_POST['post_id'] ."' ";
                     $deletedLike=$mysqli->query($deleteLiked);     
-                    header("location:tags.php?tag_id=" . $tagId);
-                    exit();    
+                    header("location:tags.php?tag_id=" . $tag['id']);
+                    exit();  
                 }
 
                 $taggedPostsQuery = "
@@ -101,14 +101,16 @@
                                     $isLiked = $likeStatusInfos->fetch_assoc();
 
                                     if (isset($loggedUserId) and !$isLiked) { ?>
-                                        <form action="tags.php?post_id=<?php echo $post['post_id'] ?>" method="post">
+                                        <form action="" method="post">
                                             <input type='submit' name="Like" value="💖">
+                                            <input type="hidden" name="post_id" value="<?php echo $post['post_id'] ?>">
                                             <?php echo $post['like_number'] ?> 
                                         </form>
                                 <?php
                                     } else if ($isLiked) { ?>
-                                        <form action="tags.php?post_id=<?php echo $post['post_id'] ?>" method="post">
+                                        <form action="" method="post">
                                             <input type='submit' name="Unlike" value="💖">
+                                            <input type="hidden" name="post_id" value="<?php echo $post['post_id'] ?>">
                                             <?php echo $post['like_number'] ?> 
                                         </form>
                                     <?php } ?>
