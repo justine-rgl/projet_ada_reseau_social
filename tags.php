@@ -21,12 +21,12 @@
             ?>
 
             <main>
-                <h2>Tag 4: <?php echo $tag ['label'] ?></h2>
+                <h2>Tag : <?php echo $tag ['label'] ?></h2>
                 
                 <?php
                 $enCoursDeTraitement = isset($_POST['Like']);
                 if ($enCoursDeTraitement)
-                {   
+                {  
                     $new_like = $_POST['Like'];
                     $new_like = $mysqli->real_escape_string($new_like);  
                                     
@@ -60,7 +60,7 @@
                     posts.id as post_id,
                     users.id as user_id,
                     users.alias as author_name,  
-                    COUNT(likes.id) as like_number,  
+                    COUNT(DISTINCT likes.id) as like_number,  
                     GROUP_CONCAT(DISTINCT tags.label) AS taglist,
                     GROUP_CONCAT(DISTINCT tags.id) AS tagidlist 
                     FROM posts_tags as filter 
