@@ -32,7 +32,6 @@
                 ?>
                     <article>
                         <h3><?php echo $tag['label'] ?></h3>
-                        <p>id:<?php echo $tag['id'] ?></p>
                         <nav>
                             <a href="tags.php?tag_id=<?php echo $tag['id'] ?>">Messages</a>
                         </nav>
@@ -62,7 +61,6 @@
                     
                     <article>
                         <h3><?php echo $user['alias'] ?></h3>
-                        <p>id:<?php echo $user['id'] ?></p>
                         <nav>
                             <a href="wall.php?user_id=<?php echo $user['id'] ?>">Mur</a>
                             | <a href="feed.php?user_id=<?php echo $user['id'] ?>">Flux</a>

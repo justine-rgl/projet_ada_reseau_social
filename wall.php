@@ -1,10 +1,13 @@
 <?php
-session_start();
+    session_start();
+    include('_header.php');
+    include('_database.php');
+    include('_loggedUserQuery.php');
 ?>
+
 <!doctype html>
 <html>
     <head>
-        <?php include('_header.php'); ?>
         <title>ReSoC - Mur</title> 
     </head>
     <body>
@@ -12,7 +15,6 @@ session_start();
         <div id="wrapper">
             <?php
             $userId =intval($_GET['user_id']);
-            include('_database.php');
             ?>
 
             <aside>
