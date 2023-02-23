@@ -141,7 +141,7 @@ session_start();
                         $deleting_like = $mysqli->real_escape_string($deleting_like);  
                     
                         $deleteLiked= "DELETE FROM likes 
-                        WHERE user_id= '" . $_SESSION['connected_id'] . "' AND post_id= post_id ";
+                        WHERE user_id= '" . $_SESSION['connected_id'] . "' AND post_id= '" . $_GET['post_id'] ."' ";
                         $deletedLike=$mysqli->query($deleteLiked);     
                         header("location:wall.php?user_id=" . $_SESSION['connected_id']);
                         exit();           
@@ -188,7 +188,7 @@ session_start();
                         <footer>
                             <small>
                                 <?php 
-                                    $likeStatus = "SELECT * FROM likes WHERE user_id= '" . $_SESSION['connected_id'] . "' AND post_id= post_id ";
+                                    $likeStatus = "SELECT * FROM likes WHERE user_id= '" . $_SESSION['connected_id'] . "' AND post_id= '" . $post['post_id'] ."' ";
                                     $likeStatusInfos = $mysqli->query($likeStatus);
                                     $isLiked = $likeStatusInfos->fetch_assoc();
 

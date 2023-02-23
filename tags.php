@@ -1,38 +1,38 @@
 <?php
-session_start();
+    session_start();
+    include('_header.php');
+    include('_database.php');
 ?>
+
 <!doctype html>
 <html >
     <head>
-        <?php include('_header.php'); ?>
         <title>ReSoC - Les messages par mot-clé</title> 
     </head>
     <body>
         <div id="wrapper">
             <?php
-            include('_database.php');
-            $tagId = intval($_GET['tag_id']);
+                $tagId = intval($_GET['tag_id']);
+                $tagsQuery = "SELECT * FROM tags WHERE id= '$tagId' ";
+                $tagsQueryInfo = $mysqli->query($tagsQuery);
+                $tag = $tagsQueryInfo->fetch_assoc();
             ?>
 
-            <aside>
-                <?php
-                $laQuestionEnSql = "SELECT * FROM tags WHERE id= '$tagId' ";
-                $lesInformations = $mysqli->query($laQuestionEnSql);
-                $tag = $lesInformations->fetch_assoc();
-                ?>
-                
-                <img src="pictures/resoc_panda.png" alt="Portrait de l'utilisatrice"/>
-                
-                <section>
-                    <h3>Présentation</h3>
-                        <p>
-                            Sur cette page vous trouverez les derniers messages comportant le mot-clé <?php echo $tag ['label']?> (n° <?php echo $tagId ?>)
-                        </p>
-                </section>
-            </aside>
-            
             <main>
+                <h2>Tag : <?php echo $tag ['label'] ?></h2>
+                
                 <?php
+                // définition de la requête
+                $tagsQuery = "SELECT * FROM `tags` LIMIT 50";
+                // envoi de la requête
+                $tagsQueryInfo = $mysqli->query($tagsQuery);
+                // check fonctionnement de la requête
+                if ( ! $tagsQueryInfo)
+                {
+                    echo("Échec de la requete : " . $mysqli->error);
+                    exit();
+                }
+
                 $laQuestionEnSql = "
                     SELECT posts.content,
                     posts.created,
@@ -72,7 +72,7 @@ session_start();
                             <p><?php echo $post['content'] ?></p>
                         </div>                                            
                         <footer>
-                            <small>💜 <?php echo $post['like_number'] ?></small>
+                            <small>💖 <?php echo $post['like_number'] ?></small>
                             <?php include('_tags.php'); ?>
                         </footer>
                     </article>

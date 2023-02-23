@@ -22,7 +22,7 @@
                 // check fonctionnement de la requête
                 if ( ! $tagsQueryInfo)
                 {
-                    echo("Échec de la requete : " . $mysqli->error);
+                    echo("Échec de la requête : " . $mysqli->error);
                     exit();
                 }
 
@@ -51,7 +51,7 @@
                 // check fonctionnement de la requête
                 if ( ! $usersQueryInfo)
                 {
-                    echo("Échec de la requete : " . $mysqli->error);
+                    echo("Échec de la requête : " . $mysqli->error);
                     exit();
                 }
 

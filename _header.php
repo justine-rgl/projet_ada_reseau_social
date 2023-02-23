@@ -18,7 +18,6 @@
                 <a href="news.php">NEWS</a>
                 <a href="wall.php?user_id=<?php echo $_SESSION['connected_id'] ?>">MUR</a>
                 <a href="feed.php?user_id=<?php echo $_SESSION['connected_id'] ?>">FEED</a>
-                <a href="tags.php?tag_id=A CHANGER">TAGS</a>
             </nav>
             <nav id="user">
                 <a href="#">PROFIL</a>
