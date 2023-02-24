@@ -207,12 +207,37 @@
                                         </form>
                                 <?php } ?>
                             </small>
+                            <?php            
+                                $text = $post['content'];
+                                preg_match_all('/#([A-Za-zÀ-ÖØ-öø-ÿ]+)/', $text, $matches);
+                                $hashtags = implode(',', $matches[1]);
+                                $explodedHashtag = explode(',',$hashtags); 
+
+                                for ($i = 0; $i <sizeof($explodedHashtag); $i++) {
+                                    $explodedHashtag[$i];
+
+                                    $existingTagsRequest = "SELECT label FROM tags WHERE label = '" . $explodedHashtag[$i] ."' ";
+                                    $existingTagsInfos = $mysqli->query($existingTagsRequest);
+                                    $tag = $existingTagsInfos->fetch_assoc();
+                                    
+                            
+                                    if (!$tag){
+                                        $addNewTag = "INSERT INTO tags "
+                                            . "(id, label) "
+                                            . "VALUES (NULL, "
+                                            . "'" . $explodedHashtag[$i] ."'" ." );"
+                                            ;
+                                        $mysqli->query($addNewTag);
+                                    }
+                                }         
+                            ?>
                             <?php include('_tags.php'); ?>
                         </footer>
                     </article>
-
+                    
                 <?php } ?>
             </main>
+            
         </div>
     </body>
 </html>
