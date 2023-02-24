@@ -33,31 +33,31 @@
                     </p>
                     
                     <?php
-                    $enCoursDeTraitement = isset($_POST['message']);
-                    if ($enCoursDeTraitement)
-                    {
-                        $new_message = $_POST['message'];
-                        $new_message = $mysqli->real_escape_string($new_message);
-             
-                        $lInstructionSql = "INSERT INTO posts "
-                                . "(id, user_id, content, created) "
-                                . "VALUES (NULL, "
-                                . $_SESSION["connected_id"] . ", "
-                                . "'" . $new_message . "', "
-                                . "NOW());"
-                                ;
-                        $ok = $mysqli->query($lInstructionSql);
-                        if ( ! $ok)
+                        $enCoursDeTraitement = isset($_POST['message']);
+                        if ($enCoursDeTraitement)
                         {
-                            echo "Impossible d'ajouter le message: " . $mysqli->error;
-                        } else
-                        {
-                            echo "Message posté";
-                            header("location:wall.php?user_id=" . $_SESSION['connected_id']);
-                            exit();
+                            $new_message = $_POST['message'];
+                            $new_message = $mysqli->real_escape_string($new_message);
+                    
+                            $lInstructionSql = "INSERT INTO posts "
+                                    . "(id, user_id, content, created) "
+                                    . "VALUES (NULL, "
+                                    . $_SESSION["connected_id"] . ", "
+                                    . "'" . $new_message . "', "
+                                    . "NOW());"
+                                    ;
+                            $ok = $mysqli->query($lInstructionSql);
+                            if ( ! $ok)
+                            {
+                                echo "Impossible d'ajouter le message: " . $mysqli->error;
+                            } else
+                            {
+                                echo "Message posté";
+                                header("location:wall.php?user_id=" . $_SESSION['connected_id']);
+                                exit();
+                            }
                         }
-                    }
-                    ?>    
+                    ?>
                     <?php 
                     if ($_SESSION['connected_id'] == $userId)
                     { ?>
@@ -172,7 +172,7 @@
                 $messageRequestInfos = $mysqli->query($messageRequest);
                 if ( ! $messageRequestInfos)
                 {
-                    echo("Échec de la requete : " . $mysqli->error);
+                    echo("Échec de la requete d'envoi de message : " . $mysqli->error);
                 }
                 
                 while ($post = $messageRequestInfos->fetch_assoc())
@@ -207,35 +207,45 @@
                                         </form>
                                 <?php } ?>
                             </small>
-                            <?php            
-                                $text = $post['content'];
-                                preg_match_all('/#([A-Za-zÀ-ÖØ-öø-ÿ]+)/', $text, $matches);
-                                $hashtags = implode(',', $matches[1]);
-                                $explodedHashtag = explode(',',$hashtags); 
+                            <?php
+                                //RECONNAISSANCE ET AJOUT DES HASHTAGS
 
+                                //on stock le contenu du message dans la variable $text pour pouvoir l'analyser       
+                                $text = $post['content'];
+                                //au moyen de la regex on est en mesure de pouvoir isoler les mots précédés d'un #
+                                preg_match_all('/#([A-Za-zÀ-ÖØ-öø-ÿ]+)/', $text, $matches);
+                                //permet de regrouper dans une string les mots identifiés en les séparant par une virgule
+                                $hashtags = implode(',', $matches[1]);
+                                //transformation en tableau 
+                                $explodedHashtag = explode(',',$hashtags); 
+                                                
                                 for ($i = 0; $i <sizeof($explodedHashtag); $i++) {
                                     $explodedHashtag[$i];
-
+                                    //vérification de l'existence du tag dans la base de données
                                     $existingTagsRequest = "SELECT label FROM tags WHERE label = '" . $explodedHashtag[$i] ."' ";
                                     $existingTagsInfos = $mysqli->query($existingTagsRequest);
-                                    $tag = $existingTagsInfos->fetch_assoc();
-                                    
-                            
+                                    while($tag = $existingTagsInfos->fetch_assoc());{
+                                    }
+                                
+                                    //si le tag n'existe pas ça l'insère dans la base de données
                                     if (!$tag){
                                         $addNewTag = "INSERT INTO tags "
                                             . "(id, label) "
                                             . "VALUES (NULL, "
                                             . "'" . $explodedHashtag[$i] ."'" ." );"
                                             ;
-                                        $mysqli->query($addNewTag);
-                                    }
-                                }         
-                            ?>
+                                        }
+                                    $mysqli->query($addNewTag);
+                                }    
+                    
+                
+                    ?>
                             <?php include('_tags.php'); ?>
                         </footer>
                     </article>
                     
                 <?php } ?>
+                
             </main>
             
         </div>
