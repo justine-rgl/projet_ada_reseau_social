@@ -26,3 +26,15 @@ Pistes d'amélioration
 ---------------
 * Amélioration du CSS
 * Ajout de features (upload photo de profil par ls utilisateurs, etc.)
+
+
+Photos du projet 
+---------------
+Login page :
+![Capture d’écran 2023-03-31 à 14 21 04](https://user-images.githubusercontent.com/115532914/229119077-63a250db-7573-457c-9da0-e813d121b85c.png)
+
+News page :
+![Capture d’écran 2023-03-31 à 14 21 47](https://user-images.githubusercontent.com/115532914/229119123-14c7ed2a-2119-43fe-84c0-f7848caa964f.png)
+
+Followers page :
+![Capture d’écran 2023-03-31 à 14 22 13](https://user-images.githubusercontent.com/115532914/229119248-817f5740-dfa9-486c-a8f7-e13eca1b2477.png)
